@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="timer-modes">
+            <button class="mode-btn active" data-mode="pomodoro">pomodoro</button>
+            <button class="mode-btn" data-mode="short-break">short break</button>
+            <button class="mode-btn" data-mode="long-break">long break</button>
+        </div>
+        <div class="timer-display">
+            <span id="minutes">25</span>:<span id="seconds">00</span>
+        </div>
+        <div class="controls">
+            <button id="start-btn">start</button>
+            <button id="reset-btn">
+                <img src="reset.svg" alt="Reset" width="32" height="32">
+            </button>
+            <button id="settings-btn">
+                <img src="settings.svg" alt="Settings" width="32" height="32">
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Menu -->
+    <div class="settings-overlay" id="settings-overlay">
+        <div class="settings-menu">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button class="close-settings" id="close-settings">×</button>
+            </div>
+            <div class="settings-content">
+                <h3>General</h3>
+                <div class="setting-item">
+                    <label>
+                        Select a theme
+                        <select id="theme-select">
+                            <option value="" disabled selected>Choose a theme</option>
+                            <option value="themes/greenjapan.jpg">Pixel Art - Green</option>
+                            <option value="themes/Evening.jpg">Pixel Art - Evening</option>
+                            <option value="themes/library.png">Library</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        Long break interval
+                        <input type="number" id="long-break-interval" value="4" min="1" max="10">
+                    </label>
+                </div>
+
+                <h3>Timer</h3>
+                <div class="setting-item">
+                    <label>
+                        Pomodoro
+                        <input type="number" id="pomodoro-duration" value="25" min="1" max="60">
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        Short break
+                        <input type="number" id="short-break-duration" value="5" min="1" max="30">
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        Long break
+                        <input type="number" id="long-break-duration" value="15" min="1" max="60">
+                    </label>
+                </div>
+
+                <div class="settings-footer">
+                    <button id="reset-all-btn">Reset All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
