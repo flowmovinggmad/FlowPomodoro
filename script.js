@@ -190,6 +190,19 @@ pomodoroDurationInput.addEventListener('change', saveTimerSettings);
 shortBreakDurationInput.addEventListener('change', saveTimerSettings);
 longBreakDurationInput.addEventListener('change', saveTimerSettings);
 
+// Preload images
+const themeImages = {
+    'GreenJapan': '/FlowPomodoro/themes/GreenJapan.jpg',
+    'Evening': '/FlowPomodoro/themes/Evening.jpg',
+    'Library': '/FlowPomodoro/themes/Library.png'
+};
+
+// Preload all theme images
+Object.values(themeImages).forEach(src => {
+    const img = new Image();
+    img.src = src;
+});
+
 // Theme handling
 themeSelect.addEventListener('change', (e) => {
     const selectedTheme = e.target.value;
@@ -203,16 +216,32 @@ themeSelect.addEventListener('change', (e) => {
         blurDiv.className = 'bg-blur';
         document.body.insertBefore(blurDiv, document.body.firstChild);
         
-        // Set background on both body and blur div
-        document.body.style.backgroundImage = `url(${selectedTheme})`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-        blurDiv.style.backgroundImage = `url(${selectedTheme})`;
-        blurDiv.style.backgroundSize = 'cover';
-        blurDiv.style.backgroundPosition = 'center';
+        // Apply background with loading state
+        document.body.style.transition = 'none';
+        blurDiv.style.transition = 'none';
+        document.body.style.opacity = '0.5';
         
-        // Save theme preference
-        localStorage.setItem('selectedTheme', selectedTheme);
+        // Create a new image to check loading
+        const img = new Image();
+        img.onload = () => {
+            // Set background on both body and blur div
+            document.body.style.backgroundImage = `url(${selectedTheme})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundPosition = 'center';
+            blurDiv.style.backgroundImage = `url(${selectedTheme})`;
+            blurDiv.style.backgroundSize = 'cover';
+            blurDiv.style.backgroundPosition = 'center';
+            
+            // Fade in smoothly
+            requestAnimationFrame(() => {
+                document.body.style.transition = 'opacity 0.3s ease';
+                document.body.style.opacity = '1';
+            });
+            
+            // Save theme preference
+            localStorage.setItem('selectedTheme', selectedTheme);
+        };
+        img.src = selectedTheme;
     } else {
         document.body.style.backgroundImage = '';
         const blurElement = document.querySelector('.bg-blur');
@@ -221,25 +250,13 @@ themeSelect.addEventListener('change', (e) => {
     }
 });
 
-// Load saved theme on page load
+// Load saved theme on startup
 window.addEventListener('load', () => {
-    loadTimerSettings();
     const savedTheme = localStorage.getItem('selectedTheme');
     if (savedTheme) {
         themeSelect.value = savedTheme;
-        
-        // Create and insert blur div
-        const blurDiv = document.createElement('div');
-        blurDiv.className = 'bg-blur';
-        document.body.insertBefore(blurDiv, document.body.firstChild);
-        
-        // Set background on both body and blur div
-        document.body.style.backgroundImage = `url(${savedTheme})`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-        blurDiv.style.backgroundImage = `url(${savedTheme})`;
-        blurDiv.style.backgroundSize = 'cover';
-        blurDiv.style.backgroundPosition = 'center';
+        // Trigger change event to load the theme
+        themeSelect.dispatchEvent(new Event('change'));
     }
 });
 
